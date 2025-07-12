@@ -4,7 +4,8 @@ SERVER = "127.0.0.1"
 PORT = 7284
 BUFFER = 1024
 
-class client
+#create a class for the client and server
+#lass client
 
 #creates the client socket making it an IP socket using TCP
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
