@@ -18,8 +18,12 @@ class Client:
     downloadedFiles = []
 
     def __init__(self, server="10.0.0.59", port=7284, buffer=1024):
+        #initializes the server IP
         self.server = server
+        #initializes the server
         self.port = port
+        #initializes how much data is sent between the server and client
+        #do not change unless it is changed on the server side as well
         self.buffer = buffer
     
     def connect(self):
@@ -100,6 +104,7 @@ while True:
     print("choose the file corresponding to the number:")
     #takes the file the user wants to download
     file = input()
+    print()
     #downloads the file
     client.downloadFile(file)
     #closes the connection
