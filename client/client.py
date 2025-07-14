@@ -1,5 +1,4 @@
-import socket, json, glob, os, tarfile
-import time
+import socket, json, glob, os, tarfile, tkinter
 
 SERVER = "127.0.0.1"
 PORT = 7284
@@ -89,26 +88,54 @@ class Client:
         #removes the old compressed file
         os.remove("cfile.tar.gz")
 
+        #temporary: closes the clinet
+        self.close()
+
+def click():
+    selected_indices = listbox.curselection()
+    if not selected_indices:
+        tkinter.messagebox.showwarning("No selection", "Please select an item to download.")
+        return
+    selected_index = selected_indices[0]
+    client.downloadFile(selected_index)
+
 #initializes the client
 client = Client(server="127.0.0.1")
+# Set up the GUI
+root = tkinter.Tk()
+root.title("Download Selector")
+
+listbox = tkinter.Listbox(root, height=10)
+client.connect()
+
+files = client.getFiles()
+print(files)
+for file in files:
+    listbox.insert(tkinter.END, file)
+listbox.pack(pady=10)
+
+download_button = tkinter.Button(root, text="Download", command=click)
+download_button.pack(pady=5)
+
+root.mainloop()
 
 #infinitely runs the code
-while True:
+#while True:
     #connects to the server
-    client.connect()
+    #client.connect()
     #gets the file name information
-    files = client.getFiles()
+    #files = client.getFiles()
     #prints it to the console
-    for i in range(0,len(files)):
-        print(f"{i}: {files[i]}")
-    print("choose the file corresponding to the number:")
+    #for i in range(0,len(files)):
+    #    print(f"{i}: {files[i]}")
+    #print("choose the file corresponding to the number:")
     #takes the file the user wants to download
-    file = input()
-    print()
+    #file = input()
+    #print()
     #downloads the file
-    client.downloadFile(file)
+    #client.downloadFile(file)
     #closes the connection
-    client.close()
+    #client.close()
 
 
     
