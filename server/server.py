@@ -1,9 +1,12 @@
-import socket, json, glob, tarfile, os, time
+import socket, json, glob, tarfile, os, time, configparser
 
-HOST = "127.0.0.1"
-PORT = 7284
-FILE_PATH = "/home/darren/Pictures/*"
-BUFFER = 1024
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+HOST = config["DEFAULT"]["serverip"]
+PORT = int(config["DEFAULT"]["port"])
+FILE_PATH = config["DEFAULT"]["file_path"]
+BUFFER = int(config["DEFAULT"]["buffer"])
 
 '''
 file = tarfile.open("Screenshots1", "x:gz")
@@ -25,7 +28,7 @@ class Server:
     communication_socket = ""
     address = ""
 
-    def __init__(self, host="127.0.0.1", port=7284, file_path='/home/darren/Pictures/*', buffer=1024):
+    def __init__(self, host="127.0.0.1", port=7284, file_path='None', buffer=1024):
         self.host = host
         self.port = port
         self.file_path = file_path
@@ -122,7 +125,7 @@ class Server:
             print(f"Error: failed to close the connection\n{e}")
 
 #creates a server object
-server = Server()
+server = Server(HOST, PORT, FILE_PATH, BUFFER)
 
 #continually runs the server
 while True:
