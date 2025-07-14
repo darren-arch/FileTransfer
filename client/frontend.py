@@ -79,4 +79,4 @@ root.mainloop()
 #l = Label(window, text="File Transfer")
 #l.pack()
 
-window.mainloop()
+#window.mainloop()
