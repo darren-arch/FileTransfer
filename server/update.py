@@ -3,7 +3,7 @@ import zipfile, os, shutil
 
 filename = "code.zip"
 
-urlretrieve("https://github.com/darren-arch/FileTransfer/archive/refs/heads/main.zip", filename)
+urlretrieve("https://api.github.com/repos/OWNER/REPO/contents/PATH", filename)
 
 with zipfile.ZipFile(f"./{filename}", 'r') as zip_ref:
     zip_ref.extractall(".")
