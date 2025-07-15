@@ -3,25 +3,29 @@
 import socket, json, glob, tarfile, os, configparser, sys
 from urllib.request import urlretrieve
 
-with open('version.ini', 'r') as file:
-    version = configparser.ConfigParser()
-    version.read(file)
-    VERSION = version["DEFAULT"]["version"]
+config = configparser.ConfigParser()
+config.read('config.ini')
 
-with open('config.ini', 'r') as file:
-    config = configparser.ConfigParser()
-    config.read(file)
-    HOST = config["DEFAULT"]["serverip"]
-    PORT = int(config["DEFAULT"]["port"])
-    FILE_PATH = config["DEFAULT"]["file_path"]
-    BUFFER = int(config["DEFAULT"]["buffer"])
-    AUTO_UPDATE = int(config["DEFAULT"]["auto_update"])
+HOST = config["DEFAULT"]["serverip"]
+PORT = int(config["DEFAULT"]["port"])
+FILE_PATH = config["DEFAULT"]["file_path"]
+BUFFER = int(config["DEFAULT"]["buffer"])
+VERSION_URL = "https://raw.githubusercontent.com/darren-arch/FileTransfer/refs/heads/main/server/config.ini"
+VERSION = "v1.1"
+AUTO_UPDATE = int(config["DEFAULT"]["auto_update"])
 
-VERSION_URL = "https://raw.githubusercontent.com/darren-arch/FileTransfer/refs/heads/main/server/version.ini"
-SERVER_URL = "https://raw.githubusercontent.com/darren-arch/FileTransfer/main/server/server.py"
-
+'''
+file = tarfile.open("Screenshots1", "x:gz")
+file.add("../../../Pictures/Screenshots", arcname="Screenshots")
+file.close()
 
 
+file = tarfile.open("./Screenshots1", "r:gz")
+file.extractall(path=".", filter="data")
+
+
+os.remove("/home/darren/Documents/projects/fileTransfer/Screenshots1")
+'''
 
 class Server:
 
@@ -62,17 +66,15 @@ class Server:
 
         urlretrieve(VERSION_URL, filename)
 
-        with open(filename, 'r') as file:
-            version = configparser.ConfigParser()
-            version.read(file)
-            version = version['DEFAULT']['version']
+        version = configparser.ConfigParser()
+        version.read(filename)
         os.remove(filename)
 
-        if version != VERSION:
+        if version['DEFAULT']['version'] != VERSION:
             print("server out of date\nrestarting...")
             filename = "server.py"
 
-            urlretrieve(SERVER_URL, filename)
+            urlretrieve("https://raw.githubusercontent.com/darren-arch/FileTransfer/main/server/server.py", filename)
 
             os.execv(__file__, sys.argv)
 
@@ -154,20 +156,6 @@ server = Server(HOST, PORT, FILE_PATH, BUFFER)
 #continually runs the server
 while True:
     server.download()
-
-'''
-file = tarfile.open("Screenshots1", "x:gz")
-file.add("../../../Pictures/Screenshots", arcname="Screenshots")
-file.close()
-
-
-file = tarfile.open("./Screenshots1", "r:gz")
-file.extractall(path=".", filter="data")
-
-
-os.remove("/home/darren/Documents/projects/fileTransfer/Screenshots1")
-'''
-
 
 '''
 #creates the server socket, using IP and TCP
