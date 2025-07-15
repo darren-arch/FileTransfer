@@ -3,19 +3,19 @@
 import socket, json, glob, tarfile, os, configparser, sys
 from urllib.request import urlretrieve
 
-with open('version.ini', 'r') as file:
-    version = configparser.ConfigParser()
-    version.read(file)
-    VERSION = version["DEFAULT"]["version"]
+#with open('version.ini', 'r') as file:
+version = configparser.ConfigParser()
+version.read(file)
+VERSION = version["DEFAULT"]["version"]
 
-with open('config.ini', 'r') as file:
-    config = configparser.ConfigParser()
-    config.read(file)
-    HOST = config["DEFAULT"]["serverip"]
-    PORT = int(config["DEFAULT"]["port"])
-    FILE_PATH = config["DEFAULT"]["file_path"]
-    BUFFER = int(config["DEFAULT"]["buffer"])
-    AUTO_UPDATE = int(config["DEFAULT"]["auto_update"])
+#with open('config.ini', 'r') as file:
+config = configparser.ConfigParser()
+config.read(file)
+HOST = config["DEFAULT"]["serverip"]
+PORT = int(config["DEFAULT"]["port"])
+FILE_PATH = config["DEFAULT"]["file_path"]
+BUFFER = int(config["DEFAULT"]["buffer"])
+AUTO_UPDATE = int(config["DEFAULT"]["auto_update"])
 
 VERSION_URL = "https://raw.githubusercontent.com/darren-arch/FileTransfer/refs/heads/main/server/version.ini"
 SERVER_URL = "https://raw.githubusercontent.com/darren-arch/FileTransfer/main/server/server.py"
@@ -62,11 +62,10 @@ class Server:
 
         urlretrieve(VERSION_URL, filename)
 
-        with open(filename, 'r') as file:
-            version = configparser.ConfigParser()
-            version.read(file)
-            version = version['DEFAULT']['version']
-        os.remove(filename)
+        #with open(filename, 'r') as file:
+        version = configparser.ConfigParser()
+        version.read(file)
+        version = version['DEFAULT']['version']
 
         if version != VERSION:
             print("server out of date\nrestarting...")
