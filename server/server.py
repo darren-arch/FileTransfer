@@ -11,7 +11,7 @@ PORT = int(config["DEFAULT"]["port"])
 FILE_PATH = config["DEFAULT"]["file_path"]
 BUFFER = int(config["DEFAULT"]["buffer"])
 VERSION_URL = "https://raw.githubusercontent.com/darren-arch/FileTransfer/refs/heads/main/server/config.ini"
-VERSION = "v1.1"
+VERSION = "v1.2"
 AUTO_UPDATE = int(config["DEFAULT"]["auto_update"])
 
 '''
