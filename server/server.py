@@ -5,12 +5,12 @@ from urllib.request import urlretrieve
 
 #with open('version.ini', 'r') as file:
 version = configparser.ConfigParser()
-version.read(file)
+version.read('version.ini')
 VERSION = version["DEFAULT"]["version"]
 
 #with open('config.ini', 'r') as file:
 config = configparser.ConfigParser()
-config.read(file)
+config.read('config.ini')
 HOST = config["DEFAULT"]["serverip"]
 PORT = int(config["DEFAULT"]["port"])
 FILE_PATH = config["DEFAULT"]["file_path"]
@@ -64,7 +64,7 @@ class Server:
 
         #with open(filename, 'r') as file:
         version = configparser.ConfigParser()
-        version.read(file)
+        version.read(filename)
         version = version['DEFAULT']['version']
 
         if version != VERSION:
