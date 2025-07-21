@@ -1,11 +1,13 @@
-import socket, json, glob, os, tarfile, tkinter
+import socket, json, glob, os, tarfile, tkinter, configparser
 
-SERVER = "127.0.0.1"
-PORT = 7284
-BUFFER = 1024
+config = configparser.ConfigParser()
+config.read('config.ini')
+SERVER = config["DEFAULT"]["serverip"]
+PORT = int(config["DEFAULT"]["port"])
+BUFFER = int(config["DEFAULT"]["buffer"])
 
 #create a class for the client and server
-class Client:
+class ClientConnect:
 
     #creates the client socket making it an IP socket using TCP
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,7 +18,7 @@ class Client:
     #creates a list of all the files that are already downloaded
     downloadedFiles = []
 
-    def __init__(self, server="10.0.0.59", port=7284, buffer=1024):
+    def __init__(self, server="127.0.0.1", port=7284, buffer=2024):
         #initializes the server IP
         self.server = server
         #initializes the server
@@ -91,25 +93,68 @@ class Client:
         #temporary: closes the clinet
         self.close()
 
-def click():
+#creates the client class, this runs the main prgram
+class Client():
+
+    client = ClientConnect(server=SERVER, port=PORT, buffer=BUFFER)
+
+    def __init__(self, title="Download Selector", geometry="500x500"):
+        self.root = tkinter.Tk()
+        self.root.title(title)
+        self.root.geometry(geometry)
+        self.listbox = tkinter.Listbox(self.root, height=10, width=100)
+        self.client.connect()
+
+        files = self.client.getFiles()
+        for file in files:
+            self.listbox.insert(tkinter.END, file)
+        self.listbox.pack(pady=10)
+
+        self.download_button = tkinter.Button(self.root, text="Download", command=self.click)
+        self.download_button.pack(pady=5)
+
+        self.settingsButton = tkinter.Button(self.root, text="Settings", command=settingsclick)
+        self.settingsButton.pack(pady=5)
+
+        self.root.mainloop()
+
+    def settingsclick(self):
+        settingswindow = tkinter.TopLevel(self.root)
+        settingswindow.title("Settings")
+        settingswindow.geometry("500x500")
+        frame = tkinter.Frame(settingswindow)
+    
+    def click(self):
+        selected_indices = self.listbox.curselection()
+        if not selected_indices:
+            tkinter.messagebox.showwarning("No selection", "Please select an item to download.")
+            return
+        selected_index = selected_indices[0]
+        self.client.downloadFile(selected_index)
+
+client = Client()
+
+""" def click():
     selected_indices = listbox.curselection()
     if not selected_indices:
         tkinter.messagebox.showwarning("No selection", "Please select an item to download.")
         return
     selected_index = selected_indices[0]
-    client.downloadFile(selected_index)
+    client.downloadFile(selected_index) """
 
-#initializes the client
-client = Client(server="127.0.0.1")
+
+
+""" #initializes the client
+client = ClientConnect(server=SERVER, port=PORT, buffer=BUFFER)
 # Set up the GUI
 root = tkinter.Tk()
 root.title("Download Selector")
+root.geometry("500x500")
 
-listbox = tkinter.Listbox(root, height=10)
+listbox = tkinter.Listbox(root, height=10, width=100)
 client.connect()
 
 files = client.getFiles()
-print(files)
 for file in files:
     listbox.insert(tkinter.END, file)
 listbox.pack(pady=10)
@@ -117,7 +162,7 @@ listbox.pack(pady=10)
 download_button = tkinter.Button(root, text="Download", command=click)
 download_button.pack(pady=5)
 
-root.mainloop()
+root.mainloop() """
 
 #infinitely runs the code
 #while True:
